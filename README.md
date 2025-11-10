@@ -26,7 +26,7 @@ El sistema estará compuesto por los siguientes módulos:
 2. **Gestor de Horarios:** Creación de turnos, jornadas laborales y franjas horarias.
 3. **Gestor de Usuarios:** Registro de empleados, supervisores y administradores.
 4. **Registro de Entrada y Salida:** Registro digital de horas con aprobación.
-5. **Módulo de Actividades:** Registro de tareas realizadas durante el turno.
+5. **Módulo de Actividades:** Registro de tareas realizadas durante el turno. (Los Supervisores o Administradores podrán asignar las tareas a cada empleado, y el empleado, al registrar el turno, podrá agregar actividades adicionales que le hayan asignado durante dicho turno)
 6. **Módulo de Aprobaciones:** Validación de registros por supervisores.
 7. **Módulo de Evaluación:** Reportes de asistencia y cumplimiento.
 
