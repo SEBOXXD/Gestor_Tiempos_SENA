@@ -1,176 +1,134 @@
-Definición del propósito
+# Proyecto: Sistema de Registro de Turnos para Microempresas
 
-El software permitirá gestionar turnos de trabajo de manera eficiente, considerando:
+## Descripción General
 
-Varias sedes de la empresa.
+Este proyecto consiste en el desarrollo de un software dirigido a **microempresas y negocios pequeños**, con el objetivo de **gestionar los turnos de trabajo** de sus empleados. La herramienta permitirá registrar entradas y salidas, asignar actividades, aprobar registros y mantener control de asistencia, adaptándose a estructuras organizativas simples pero funcionales.
 
-Horarios de entrada y salida.
+El sistema busca optimizar la gestión de horarios, ofrecer transparencia en las horas trabajadas y facilitar la supervisión de turnos.
 
-Registro de usuarios (empleados y administradores).
+---
 
-Aprobaciones de turnos o modificaciones.
+## Objetivos del Proyecto
 
-Actividades asignadas por turno.
+* Permitir el **registro de entrada y salida** de los empleados de manera digital.
+* Implementar un flujo de **aprobación de registros** por parte de los supervisores.
+* Gestionar la información relacionada con **sedes, horarios, usuarios y actividades**.
+* Facilitar la **evaluación y control de asistencia** en cada sede.
+* Mejorar la **eficiencia administrativa** de pequeñas empresas sin necesidad de herramientas complejas.
 
-2️⃣ Identificación de los actores
+---
 
-Los actores principales serán:
+## Alcance del Proyecto
 
-Administrador / Gerente
+El sistema estará compuesto por los siguientes módulos:
 
-Crea sedes, horarios y actividades.
+1. **Gestor de Sedes:** Definición de las sedes o puntos de trabajo.
+2. **Gestor de Horarios:** Creación de turnos, jornadas laborales y franjas horarias.
+3. **Gestor de Usuarios:** Registro de empleados, supervisores y administradores.
+4. **Registro de Entrada y Salida:** Registro digital de horas con aprobación.
+5. **Módulo de Actividades:** Registro de tareas realizadas durante el turno.
+6. **Módulo de Aprobaciones:** Validación de registros por supervisores.
+7. **Módulo de Evaluación:** Reportes de asistencia y cumplimiento.
 
-Asigna permisos a usuarios.
+---
 
-Supervisa turnos y aprueba cambios.
+## Clasificación de Procesos
 
-Empleado / Usuario
+| Tipo de Proceso              | Procesos Asociados                                                          |
+| ---------------------------- | --------------------------------------------------------------------------- |
+| **Estratégicos**             | Planificación de horarios, asignación de roles, análisis de productividad   |
+| **Misionales (Principales)** | Registro de entrada y salida, registro de actividades, aprobación de turnos |
+| **De Apoyo**                 | Gestión de usuarios, mantenimiento del sistema, soporte técnico             |
+| **De Evaluación o Control**  | Generación de reportes, verificación de registros, auditorías de asistencia |
 
-Solicita turnos.
+---
 
-Registra entrada y salida.
+## Descripción del Proceso Principal: Registro de Entrada y Salida
 
-Consulta su horario y actividades asignadas.
+### Objetivo
 
-Aprobador (opcional)
+Registrar de forma precisa la **hora de entrada y salida** de cada empleado, asociando sus actividades diarias y garantizando su validación por parte del supervisor.
 
-Valida solicitudes de turnos o cambios.
+### Participantes
 
-Puede ser un rol del administrador o un supervisor intermedio.
+* **Empleado:** Realiza el registro de entrada, actividades y salida.
+* **Sistema:** Valida horarios y almacena los datos.
+* **Supervisor:** Revisa y aprueba los registros enviados.
 
-3️⃣ Procesos principales
+### Flujo BPMN del Proceso
 
-Se pueden dividir en macroprocesos:
+1. El **empleado** inicia sesión en el sistema.
+2. Se **validan las credenciales**.
+3. Selecciona **sede y turno asignado**.
+4. Registra la **hora de entrada**.
+5. Durante el turno, **registra actividades**.
+6. Al finalizar, registra la **hora de salida**.
+7. El sistema **envía el registro al supervisor**.
+8. El supervisor **aprueba o rechaza** el registro.
+9. El sistema **actualiza el estado** (Aprobado/Rechazado).
+10. Se **genera un resumen** de horas trabajadas y actividades.
 
-3.1 Gestión de sedes
+---
 
-Crear / actualizar / eliminar sedes.
+## Entradas, Salidas y Reglas del Proceso
 
-Asignar usuarios a sedes.
+| Elemento              | Descripción                                                                                                                                                                                                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Entradas**          | Datos del empleado, horario asignado, sede, hora de entrada, hora de salida, actividades realizadas                                                                                                                                                                       |
+| **Salidas**           | Registro validado, resumen de jornada, estado de aprobación                                                                                                                                                                                                               |
+| **Reglas de Negocio** | 1. Solo se puede registrar entrada si el turno está activo. <br> 2. Cada registro debe ser aprobado por un supervisor. <br> 3. Los registros pueden ser modificados antes de ser enviados. <br> 4. Los reportes se generan automáticamente según el estado de aprobación. |
 
-3.2 Gestión de usuarios
+---
 
-Registrar nuevos usuarios.
+## Tecnologías Propuestas
 
-Asignar roles y permisos.
+* **Backend:** Node.js / Express.js
+* **Base de Datos:** MySQL / phpMyAdmin
+* **Frontend:** HTML, CSS, JavaScript, EJS (para vistas dinámicas)
+* **Integraciones:** Correo electrónico para notificaciones de aprobación
 
-Modificar información personal.
+---
 
-3.3 Gestión de horarios y turnos
+## Diagrama BPMN (Resumen)
 
-Crear horarios disponibles (por sede o por día).
+El proceso BPMN incluye los siguientes actores y pasos principales:
 
-Asignar turnos a los usuarios.
+* **Empleado:** Inicia sesión, selecciona sede, registra entrada/salida, registra actividades.
+* **Sistema:** Valida horarios, almacena registros, genera reportes.
+* **Supervisor:** Revisa y aprueba o rechaza registros.
 
-Solicitar cambios de turno.
+El flujo garantiza trazabilidad y control sobre cada acción realizada dentro del sistema.
 
-Registrar entrada y salida de cada usuario.
+---
 
-3.4 Gestión de actividades
+## Indicadores Clave (KPIs)
 
-Definir actividades o tareas por turno.
+* Porcentaje de registros aprobados vs rechazados.
+* Tiempo promedio de aprobación por supervisor.
+* Porcentaje de asistencia por sede.
+* Promedio de horas trabajadas por empleado.
 
-Asignar actividades a los usuarios o a los turnos.
+---
 
-Registrar el progreso o finalización de la actividad.
+## Beneficios Esperados
 
-3.5 Aprobaciones
+* Reducción de errores manuales en los registros.
+* Mayor transparencia y control de asistencia.
+* Aumento en la eficiencia administrativa.
+* Trazabilidad completa de cada registro.
+* Informes claros para la toma de decisiones.
 
-Revisar solicitudes de cambios o permisos.
+---
 
-Aprobar o rechazar cambios de turnos.
+## Próximos Pasos
 
-Registrar decisiones de aprobación (historial).
+1. Diseñar las tablas base de datos (Usuarios, Turnos, Actividades, Aprobaciones, Sedes, Registros).
+2. Crear prototipo de interfaz para el registro de horarios.
+3. Implementar el flujo de aprobación.
+4. Generar reportes automáticos y panel de control.
 
-3.6 Reportes y seguimiento
+---
 
-Consultar turnos asignados por usuario, sede o fecha.
-
-Generar reportes de asistencia.
-
-Historial de actividades y aprobaciones.
-
-4️⃣ Flujo general del proceso
-
-Podemos resumirlo así:
-
-[Inicio] 
-   ↓
-[Gestión de Sedes y Horarios]
-   ↓
-[Gestión de Usuarios y Roles]
-   ↓
-[Registro de Turnos y Actividades]
-   ↓
-[Solicitudes de Cambios / Aprobaciones]
-   ↓
-[Registro de Entrada y Salida]
-   ↓
-[Reportes / Seguimiento]
-   ↓
-[Fin]
-
-5️⃣ Tipos de mapa de procesos sugeridos
-
-Para tu software, podrías usar:
-
-Mapa de procesos macro (nivel alto)
-
-Ideal para presentar la idea general del sistema a tu equipo.
-
-Diagrama de flujo detallado (nivel operativo)
-
-Cada proceso (por ejemplo, “Solicitud de turno”) se descompone en pasos específicos.
-
-Diagrama BPMN
-
-Si quieres algo profesional y claro para cada actor y proceso, mostrando roles, decisiones y flujos de información.
-
-Procesos Estratégicos
-
-Son los que definen la dirección y objetivos del sistema o de la empresa. En tu caso:
-
-Gestión de Sedes
-Definir y organizar las sedes de la empresa es estratégico para estructurar horarios y usuarios.
-
-Gestión de Roles y Permisos
-Decidir qué usuarios tienen acceso a qué funcionalidades impacta en la estructura y seguridad del negocio.
-
-2️⃣ Procesos Misionales o Principales
-
-Son los procesos centrales al propósito del software: registrar turnos, actividades y asistencia.
-
-Gestión de Horarios y Turnos
-Creación, asignación y modificación de turnos.
-
-Registro de Entrada y Salida
-Seguimiento de asistencia de los usuarios.
-
-Gestión de Actividades
-Asignación y seguimiento de tareas dentro de cada turno.
-
-3️⃣ Procesos de Apoyo
-
-Son los que facilitan la operación de los procesos principales, pero no son el núcleo de la misión:
-
-Gestión de Usuarios (Registro y Actualización)
-Permite que los empleados existan en el sistema y puedan registrarse en turnos.
-
-Soporte Técnico / Mantenimiento del Software (si se implementa)
-Garantiza que el sistema funcione correctamente.
-
-Configuración de Notificaciones o Alertas
-Apoya a los usuarios a cumplir sus turnos y actividades.
-
-4️⃣ Procesos de Evaluación o Control
-
-Son los que miden, supervisan y aseguran la calidad de los procesos:
-
-Aprobaciones de Turnos y Cambios
-Control sobre solicitudes de modificación o asignación de turnos.
-
-Generación de Reportes
-Permite revisar asistencia, cumplimiento de actividades y eficiencia.
-
-Historial de Actividades y Turnos
-Control documental y seguimiento de desempeño de usuarios y sedes.
+**Autor:** Papasito
+**Versión:** 1.0
+**Propósito:** Documento base para la planificación y desarrollo del Sistema de Registro de Turnos.
