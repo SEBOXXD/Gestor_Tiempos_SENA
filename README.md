@@ -132,3 +132,23 @@ El flujo garantiza trazabilidad y control sobre cada acción realizada dentro de
 **Autor:** Papasito
 **Versión:** 1.0
 **Propósito:** Documento base para la planificación y desarrollo del Sistema de Registro de Turnos.
+
+---
+#Adicionales
+1. Modulo de Gestor de Recursos: El módulo de Gestión de Recursos en tu proyecto tiene la función de administrar y controlar los recursos (humanos, materiales y temporales) que se utilizan en las actividades o tareas asignadas dentro del sistema.
+Supón que hay una actividad llamada “Revisión de inventario en Sede A”.
+El coordinador la crea y asigna los siguientes recursos:
+
+Humano: María López.
+
+Material: Tablet Samsung.
+
+Tiempo: 2 horas estimadas.
+
+El sistema:
+
+Marca la tablet como “En uso” durante el rango asignado.
+
+Guarda el registro en el historial de uso del recurso.
+
+Una vez finalizada la actividad, cambia su estado a “Disponible” y calcula el tiempo real utilizado.
