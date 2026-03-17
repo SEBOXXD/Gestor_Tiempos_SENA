@@ -1,7 +1,19 @@
+import { useState } from "react";
 import "../styles/login.css";
 import bgImage from "../assets/bg-texture.gif";
 
 function Login() {
+  const [error, setError] = useState(false);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log("CLICK DETECTADO");
+
+    // Simulación de error
+    setError(true);
+  };
+
+
   return (
     <div
       className="login-container"
@@ -13,13 +25,27 @@ function Login() {
 
       <div className="login-card">
         <h1 className="logo">Chronos</h1>
-        <p className="subtitle">Gestión de tiempos</p>
+        <p className="subtitle">Sistema de gestión de tiempos</p>
 
-        <form>
-          <input type="email" placeholder="Correo" />
-          <input type="password" placeholder="Contraseña" />
+        <form onSubmit ={handleLogin}>
+          <div className="input-group">
+            <input type="email" />
+            <label>Correo</label>
+          </div>
 
-          <button>Iniciar sesión</button>
+          <div className="input-group">
+            <input type="password" />
+            <label>Contraseña</label>
+          </div>
+
+          {/* MENSAJE DE ERROR */}
+          {error && (
+            <div className="error-mesage">
+              Correo o contraseña incorrectos
+            </div>
+          )}
+
+          <button type="submit">Ingresar</button>
         </form>
       </div>
     </div>

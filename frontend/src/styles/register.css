@@ -7,27 +7,19 @@
   --white: #ffffff;
 }
 
-/* RESET */
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* FONDO */
-.login-container {
+/* CONTENEDOR */
+.register-container {
   height: 100vh;
   background: linear-gradient(135deg, var(--background), var(--primary));
   background-size: cover;
   background-position: center;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  position: relative;
 }
 
-/* OVERLAY CON BLUR */
+/* OVERLAY */
 .overlay {
   position: absolute;
   width: 100%;
@@ -36,12 +28,12 @@ html, body, #root {
   backdrop-filter: blur(6px);
 }
 
-/* TARJETA GLASS */
-.login-card {
+/* TARJETA */
+.register-card {
   position: relative;
   z-index: 2;
-  width: 340px;
-  padding: 45px 35px;
+  width: 360px;
+  padding: 40px;
   border-radius: 16px;
 
   background: rgba(31, 111, 111, 0.25);
@@ -51,43 +43,29 @@ html, body, #root {
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 
   text-align: center;
-  animation: fadeIn 0.8s ease;
 }
 
-/* ANIMACIÓN */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* LOGO */
 .logo {
   color: var(--white);
   margin-bottom: 5px;
-  font-size: 28px;
-  letter-spacing: 1px;
 }
 
+/* SUBTITULO */
 .subtitle {
   color: var(--light);
-  font-size: 14px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
-/* INPUT GROUP MODERNO */
+/* INPUT GROUP */
 .input-group {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .input-group input {
   width: 100%;
-  padding: 12px 10px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
   outline: none;
@@ -96,10 +74,10 @@ html, body, #root {
   color: white;
 }
 
-/* LABEL ANIMADO */
+/* LABEL */
 .input-group label {
   position: absolute;
-  left: 10px;
+  left: 12px;
   top: 12px;
   color: #ccc;
   font-size: 14px;
@@ -107,7 +85,6 @@ html, body, #root {
   pointer-events: none;
 }
 
-/* EFECTO FOCUS */
 .input-group input:focus + label,
 .input-group input:valid + label {
   top: -8px;
@@ -115,13 +92,8 @@ html, body, #root {
   color: var(--accent);
 }
 
-/* INPUT FOCUS BORDER */
-.input-group input:focus {
-  box-shadow: 0 0 0 2px var(--accent);
-}
-
-/* BOTÓN PRO */
-.login-card button {
+/* BOTÓN */
+.register-card button {
   width: 100%;
   padding: 12px;
   margin-top: 10px;
@@ -134,36 +106,33 @@ html, body, #root {
   font-weight: bold;
 
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
-/* HOVER */
-.login-card button:hover {
+.register-card button:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(44, 156, 156, 0.4);
 }
 
-.error-mesage {
+/* ERROR */
+.error-message {
   margin-top: 10px;
   padding: 10px;
   border-radius: 8px;
 
   background: rgba(255, 0, 0, 0.15);
-  color: #ff0000;
+  color: #ff6b6b;
   font-size: 13px;
-
-  border: 1px solid rgba(255, 0, 0, 0.3);
-
-  animation: fadeError 0.3s ease;
 }
 
-/* Animación */
-@keyframes fadeError {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  } }
+/* LINK */
+.login-link {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.login-link span {
+  color: var(--accent);
+  cursor: pointer;
+}
