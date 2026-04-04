@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/login.css";
 import bgImage from "../assets/bg-texture.gif";
+import Background from "../components/Background";
 
 function Login() {
   const [error, setError] = useState(false);
@@ -17,10 +18,12 @@ function Login() {
   return (
     <div
       className="login-container"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-      }}
+      // style={{
+        // backgroundImage: `url(${bgImage})`,
+      // }
+    // }
     >
+      {/* <Background /> */}
       <div className="overlay"></div>
 
       <div className="login-card">
