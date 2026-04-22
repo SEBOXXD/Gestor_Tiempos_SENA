@@ -1,0 +1,529 @@
+/* =============================================
+   LANDING.CSS — Página de presentación de CHRONOS
+   Estética: minimalista, elegante, glassmorphism sutil.
+   ============================================= */
+
+/* -------------------------------------------------------
+   RESET Y BASE LOCAL
+   ------------------------------------------------------- */
+.landing-page {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--white);
+  font-family: var(--font-main);
+  overflow-x: hidden;       /* Evita scroll horizontal */
+}
+
+/* -------------------------------------------------------
+   ANIMACIONES GLOBALES
+   Se reutilizan en múltiples secciones.
+   ------------------------------------------------------- */
+
+/* Entrada suave desde abajo */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Entrada suave desde la izquierda */
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+/* Pulso suave para el punto de estado "activo" */
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.6; transform: scale(1.15); }
+}
+
+/* Movimiento lento del gradiente de fondo */
+@keyframes gradientShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+/* -------------------------------------------------------
+   NAVBAR
+   position: fixed → se mantiene arriba al hacer scroll.
+   backdrop-filter → efecto de vidrio sobre el contenido.
+   ------------------------------------------------------- */
+.landing-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 60px;
+
+  background: rgba(10, 31, 31, 0.75);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(167, 215, 215, 0.08);
+}
+
+/* Logo en la navbar */
+.nav-logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  /* Texto con degradado */
+  background: linear-gradient(90deg, var(--accent), var(--light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Links de navegación */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-link {
+  font-size: 13px;
+  color: rgba(167, 215, 215, 0.7);
+  cursor: pointer;
+  transition: color 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover {
+  color: var(--white);
+}
+
+/* Botón de la navbar */
+.nav-cta {
+  padding: 9px 22px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+
+.nav-cta:hover {
+  background: var(--accent);
+  color: var(--white);
+  box-shadow: 0 4px 18px rgba(44, 156, 156, 0.35);
+}
+
+/* -------------------------------------------------------
+   SECCIÓN HERO
+   La sección principal que ocupa toda la pantalla.
+   ------------------------------------------------------- */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+
+  /* Fondo animado con los 4 colores de la paleta */
+  background: linear-gradient(
+    135deg,
+    #0a1f1f 0%,
+    #0f3d3e 40%,
+    #1a5555 70%,
+    #0a1f1f 100%
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 18s ease infinite;
+}
+
+/* Círculos decorativos de fondo (efecto "glow") */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+.hero-glow-1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(44, 156, 156, 0.12);
+  top: -100px;
+  right: -100px;
+}
+
+.hero-glow-2 {
+  width: 360px;
+  height: 360px;
+  background: rgba(15, 61, 62, 0.4);
+  bottom: -60px;
+  left: -80px;
+}
+
+/* Contenido del hero */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  animation: fadeUp 0.9s ease both;
+}
+
+/* Chip / badge encima del headline */
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 99px;
+  background: rgba(44, 156, 156, 0.12);
+  border: 1px solid rgba(44, 156, 156, 0.3);
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  margin-bottom: 28px;
+}
+
+/* Punto parpadeante de "en vivo" */
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease infinite;
+}
+
+/* Título principal — el elemento más grande de la página */
+.hero-title {
+  font-size: clamp(38px, 6vw, 72px);  /* clamp: mínimo, fluido, máximo */
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+  color: var(--white);
+}
+
+/* Palabra resaltada con degradado */
+.hero-title .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtítulo del hero */
+.hero-subtitle {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(167, 215, 215, 0.7);
+  line-height: 1.7;
+  margin-bottom: 44px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Botones de acción del hero */
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Botón primario (relleno) */
+.btn-primary {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--secondary));
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(44, 156, 156, 0.45);
+}
+
+/* Botón secundario (fantasma/outline) */
+.btn-ghost {
+  padding: 14px 32px;
+  border: 1px solid rgba(167, 215, 215, 0.25);
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(167, 215, 215, 0.85);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  font-family: inherit;
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(44, 156, 156, 0.06);
+}
+
+/* Línea divisoria inferior del hero */
+.hero-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(44, 156, 156, 0.4),
+    transparent
+  );
+}
+
+/* -------------------------------------------------------
+   SECCIÓN STATS
+   Fila de 3 métricas grandes y llamativas.
+   ------------------------------------------------------- */
+.stats-section {
+  padding: 72px 60px;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-bottom: 1px solid rgba(167, 215, 215, 0.07);
+}
+
+.stat-item {
+  flex: 1;
+  max-width: 280px;
+  text-align: center;
+  padding: 24px 32px;
+  animation: fadeUp 0.8s ease both;
+  position: relative;
+}
+
+/* Separador vertical entre stats */
+.stat-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(167, 215, 215, 0.12);
+}
+
+.stat-number {
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: rgba(167, 215, 215, 0.55);
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* -------------------------------------------------------
+   SECCIÓN FEATURES
+   Grid de características del producto.
+   ------------------------------------------------------- */
+.features-section {
+  padding: 90px 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+
+.section-subtitle {
+  font-size: 15px;
+  color: rgba(167, 215, 215, 0.6);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 56px;
+  line-height: 1.7;
+}
+
+/* Grid de features: 3 columnas */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Tarjeta de feature — glassmorphism sutil */
+.feature-card {
+  padding: 32px 28px;
+  border-radius: 20px;
+  background: rgba(31, 111, 111, 0.1);
+  border: 1px solid rgba(167, 215, 215, 0.1);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  animation: fadeUp 0.8s ease both;
+  cursor: default;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(44, 156, 156, 0.3);
+  background: rgba(44, 156, 156, 0.08);
+}
+
+.feature-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(44, 156, 156, 0.15);
+  border: 1px solid rgba(44, 156, 156, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  color: rgba(167, 215, 215, 0.6);
+  line-height: 1.7;
+}
+
+/* -------------------------------------------------------
+   SECCIÓN CTA FINAL
+   Llamado a la acción al final de la página.
+   ------------------------------------------------------- */
+.cta-section {
+  padding: 100px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glow central de la sección CTA */
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(
+    ellipse,
+    rgba(44, 156, 156, 0.1) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.cta-title {
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-subtitle {
+  font-size: 15px;
+  color: rgba(167, 215, 215, 0.6);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+/* -------------------------------------------------------
+   FOOTER
+   Minimalista: solo logo + copyright + links.
+   ------------------------------------------------------- */
+.landing-footer {
+  padding: 32px 60px;
+  border-top: 1px solid rgba(167, 215, 215, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(167, 215, 215, 0.35);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-link {
+  font-size: 12px;
+  color: rgba(167, 215, 215, 0.45);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: var(--accent);
+}
