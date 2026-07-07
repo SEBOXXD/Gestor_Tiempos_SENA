@@ -1,0 +1,36 @@
+.auditoria-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--background) 0%, var(--primary) 100%);
+  color: var(--white);
+  font-family: var(--font-main);
+}
+
+.auditoria-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.accion-badge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(44, 156, 156, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(44, 156, 156, 0.2);
+}
+
+.ip-code {
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: rgba(167, 215, 215, 0.7);
+}

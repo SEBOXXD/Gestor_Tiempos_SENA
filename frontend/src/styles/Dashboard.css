@@ -29,6 +29,9 @@
 .sidebar {
   width: 230px;
   min-width: 230px;
+  height: 100vh;       /* El sidebar ocupa toda la altura de la ventana */
+  overflow-y: auto;    /* Si hubiera muchos ítems, solo el sidebar scrollea */
+  flex-shrink: 0;      /* No se encoge aunque el contenido principal sea ancho */
   background: rgba(15, 61, 62, 0.92);
   backdrop-filter: blur(12px);
   border-right: 1px solid var(--glass-border);

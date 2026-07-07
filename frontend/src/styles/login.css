@@ -206,7 +206,7 @@
    Aparece debajo del formulario cuando hay un error.
    La animación de entrada lo hace aparecer desde arriba.
    ------------------------------------------------------- */
-.error-mesage {
+.error-message {
   margin-top: 14px;
   padding: 11px 14px;
   border-radius: 10px;
@@ -232,13 +232,31 @@
   color: rgba(167, 215, 215, 0.65);
 }
 
-.login-link span {
+.login-link a,
+.login-link .link-btn {
   color: var(--accent);
   cursor: pointer;
   font-weight: 600;
   transition: color 0.2s;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
 }
 
-.login-link span:hover {
+.login-link a:hover,
+.login-link .link-btn:hover {
+  color: var(--light);
+}
+
+.login-link .link-btn.muted {
+  color: rgba(167, 215, 215, 0.6);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.login-link .link-btn.muted:hover {
   color: var(--light);
 }
