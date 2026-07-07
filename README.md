@@ -152,3 +152,92 @@ Marca la tablet como “En uso” durante el rango asignado.
 Guarda el registro en el historial de uso del recurso.
 
 Una vez finalizada la actividad, cambia su estado a “Disponible” y calcula el tiempo real utilizado.
+
+---
+
+## Inicialización del Proyecto
+
+### Requisitos
+
+- **Node.js** v18 o superior
+- **npm** v9 o superior
+
+### Frontend
+
+```bash
+# Entrar al directorio del frontend
+cd frontend
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo (http://localhost:5173)
+npm run dev
+
+# Compilar para producción
+npm run build
+
+# Vista previa de la compilación
+npm run preview
+
+# Verificar lint
+npm run lint
+```
+
+### Backend
+
+```bash
+# Entrar al directorio del backend
+cd backend
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor (requiere implementar app.js)
+npm start
+```
+
+### Estructura del Proyecto
+
+```
+Gestor_Tiempos_SENA/
+├── backend/               # API REST con Node.js + Express
+│   └── src/
+│       ├── app.js         # Punto de entrada
+│       ├── controllers/   # Lógica de negocio
+│       ├── models/        # Modelos de datos
+│       ├── routes/        # Definición de rutas
+│       └── services/      # Servicios auxiliares
+├── database/              # Esquemas y scripts SQL
+├── docs/                  # Documentación adicional
+├── frontend/              # UI con React + Vite
+│   └── src/
+│       ├── components/    # Componentes reutilizables
+│       ├── pages/         # Páginas de la aplicación
+│       ├── routes/        # Configuración de rutas
+│       ├── styles/        # Hojas de estilo CSS
+│       ├── context/       # Contextos de React
+│       ├── hooks/         # Hooks personalizados
+│       ├── services/      # Servicios de API
+│       └── assets/        # Recursos estáticos
+└── README.md
+```
+
+### Rutas del Frontend
+
+| Ruta              | Página            | Descripción                          |
+| ----------------- | ----------------- | ------------------------------------ |
+| `/`               | Login             | Inicio de sesión                     |
+| `/register`       | Registro          | Creación de cuenta                   |
+| `/landing`        | Landing           | Página de presentación               |
+| `/inicio`         | Inicio            | Panel principal del usuario          |
+| `/dashboard`      | Dashboard         | Resumen ejecutivo                    |
+| `/usuarios`       | Usuarios          | Gestión de empleados                 |
+| `/jornada`        | Turnos            | Gestión de jornadas laborales        |
+| `/aprobaciones`   | Aprobaciones      | Aprobación de registros              |
+| `/actividades`    | Actividades       | Gestión de tareas                    |
+| `/reportes`       | Reportes          | Reportes y estadísticas              |
+| `/notificaciones` | Notificaciones    | Centro de notificaciones             |
+| `/auditoria`      | Auditoría         | Historial de acciones                |
+| `/configuracion`  | Configuración     | Ajustes del sistema                  |
+| `/contacto`       | Contacto          | Formulario de contacto               |
