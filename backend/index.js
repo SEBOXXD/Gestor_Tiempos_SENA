@@ -10,6 +10,8 @@ const usuariosRoutes = require('./src/routes/usuarios');
 const actividadesRoutes = require('./src/routes/actividades');
 const turnosRoutes = require('./src/routes/turnos');
 const estadosRoutes = require('./src/routes/estados');
+const registrosRoutes = require('./src/routes/registros');
+const aprobacionesRoutes = require('./src/routes/aprobaciones');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -60,6 +62,8 @@ app.use('/api/usuarios', usuariosRoutes(pool));
 app.use('/api/actividades', actividadesRoutes(pool));
 app.use('/api/turnos', turnosRoutes(pool));
 app.use('/api/estados', estadosRoutes(pool));
+app.use('/api/registros', registrosRoutes(pool));
+app.use('/api/aprobaciones', aprobacionesRoutes(pool));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
