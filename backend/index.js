@@ -6,6 +6,10 @@ const mysql = require('mysql2/promise');
 const authRoutes = require('./src/routes/auth');
 const sedesRoutes = require('./src/routes/sedes');
 const rolesRoutes = require('./src/routes/roles');
+const usuariosRoutes = require('./src/routes/usuarios');
+const actividadesRoutes = require('./src/routes/actividades');
+const turnosRoutes = require('./src/routes/turnos');
+const estadosRoutes = require('./src/routes/estados');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -52,6 +56,10 @@ app.get('/api/health', async (req, res) => {
 app.use('/api/auth', authRoutes(pool));
 app.use('/api/sedes', sedesRoutes(pool));
 app.use('/api/roles', rolesRoutes(pool));
+app.use('/api/usuarios', usuariosRoutes(pool));
+app.use('/api/actividades', actividadesRoutes(pool));
+app.use('/api/turnos', turnosRoutes(pool));
+app.use('/api/estados', estadosRoutes(pool));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
