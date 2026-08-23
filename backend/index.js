@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 
+const authRoutes = require('./src/routes/auth');
+const sedesRoutes = require('./src/routes/sedes');
+const rolesRoutes = require('./src/routes/roles');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -38,66 +42,16 @@ app.get('/', (req, res) => {
 
 app.get('/api/health', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT 1');
+    await pool.query('SELECT 1');
     res.json({ status: 'ok', database: 'connected' });
   } catch (err) {
     res.status(500).json({ status: 'error', database: 'disconnected', error: err.message });
   }
 });
 
-app.get('/api/usuarios', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM usuario');
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get('/api/sedes', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM sede');
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get('/api/roles', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM rol');
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get('/api/actividades', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM actividad');
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get('/api/turnos', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM turno');
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get('/api/registros', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM registro_hora');
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+app.use('/api/auth', authRoutes(pool));
+app.use('/api/sedes', sedesRoutes(pool));
+app.use('/api/roles', rolesRoutes(pool));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
