@@ -1,13 +1,7 @@
-CREATE DATABASE IF NOT EXISTS chronos_db
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+-- Ejecutar UNA SENTENCIA A LA VEZ en Railway
+-- Railway ya crea la base de datos, no necesitas CREATE DATABASE ni USE
 
-USE chronos_db;
-
--- ============================================================
--- Tablas base (sin dependencias)
--- ============================================================
-
+-- 1) Tabla: rol
 CREATE TABLE rol (
   id_rol       INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nombre_rol   VARCHAR(30)  NOT NULL,
@@ -15,6 +9,7 @@ CREATE TABLE rol (
   UNIQUE KEY nombre_rol (nombre_rol)
 ) ENGINE=InnoDB;
 
+-- 2) Tabla: sede
 CREATE TABLE sede (
   id_sede    INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nombre     VARCHAR(100) NOT NULL,
@@ -23,6 +18,7 @@ CREATE TABLE sede (
   PRIMARY KEY (id_sede)
 ) ENGINE=InnoDB;
 
+-- 3) Tabla: estado_actividad
 CREATE TABLE estado_actividad (
   id_estado       INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nombre_estado   VARCHAR(30)  NOT NULL,
@@ -30,6 +26,7 @@ CREATE TABLE estado_actividad (
   UNIQUE KEY nombre_estado (nombre_estado)
 ) ENGINE=InnoDB;
 
+-- 4) Tabla: turno
 CREATE TABLE turno (
   id_turno                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nombre_turno             VARCHAR(30)  NOT NULL,
@@ -39,10 +36,7 @@ CREATE TABLE turno (
   PRIMARY KEY (id_turno)
 ) ENGINE=InnoDB;
 
--- ============================================================
--- Tablas con dependencias
--- ============================================================
-
+-- 5) Tabla: usuario
 CREATE TABLE usuario (
   id_usuario       INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nombre           VARCHAR(100) NOT NULL,
@@ -57,6 +51,7 @@ CREATE TABLE usuario (
   CONSTRAINT fk_usuario_sede FOREIGN KEY (id_sede) REFERENCES sede (id_sede)    ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- 6) Tabla: actividad
 CREATE TABLE actividad (
   id_actividad     INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   nombre           VARCHAR(100)  NOT NULL,
@@ -73,6 +68,7 @@ CREATE TABLE actividad (
   CONSTRAINT fk_actividad_sede    FOREIGN KEY (id_sede)    REFERENCES sede (id_sede)               ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- 7) Tabla: registro_hora
 CREATE TABLE registro_hora (
   id_registro   INT UNSIGNED NOT NULL AUTO_INCREMENT,
   fecha         DATE         NOT NULL,
@@ -88,6 +84,7 @@ CREATE TABLE registro_hora (
   CONSTRAINT fk_registro_turno    FOREIGN KEY (id_turno)   REFERENCES turno (id_turno)             ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- 8) Tabla: aprobacion
 CREATE TABLE aprobacion (
   id_aprobacion      INT UNSIGNED NOT NULL AUTO_INCREMENT,
   fecha_aprobacion   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -101,6 +98,7 @@ CREATE TABLE aprobacion (
   CONSTRAINT fk_aprobacion_supervisor  FOREIGN KEY (id_supervisor) REFERENCES usuario (id_usuario)        ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- 9) Tabla: historial
 CREATE TABLE historial (
   id_historial   INT UNSIGNED NOT NULL AUTO_INCREMENT,
   accion         VARCHAR(150) NOT NULL,
@@ -110,6 +108,7 @@ CREATE TABLE historial (
   CONSTRAINT fk_historial_usuario FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- 10) Tabla: reporte
 CREATE TABLE reporte (
   id_reporte          INT UNSIGNED NOT NULL AUTO_INCREMENT,
   tipo                VARCHAR(50)  NOT NULL,
@@ -119,18 +118,17 @@ CREATE TABLE reporte (
   CONSTRAINT fk_reporte_usuario FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- ============================================================
--- Vistas
--- ============================================================
-
+-- 11) Vista: vw_actividad_empleado
 CREATE OR REPLACE VIEW vw_actividad_empleado AS
 SELECT id_actividad, nombre, descripcion, fecha_limite, id_estado
 FROM actividad;
 
+-- 12) Vista: vw_perfil_usuario
 CREATE OR REPLACE VIEW vw_perfil_usuario AS
 SELECT id_usuario, nombre, correo
 FROM usuario;
 
+-- 13) Vista: vw_usuarios_supervisor
 CREATE OR REPLACE VIEW vw_usuarios_supervisor AS
 SELECT id_usuario, nombre, correo, estado_usuario, id_sede
 FROM usuario;

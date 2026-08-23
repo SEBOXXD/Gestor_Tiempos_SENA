@@ -1,8 +1,38 @@
+/**
+ * ====================================================================
+ * ARCHIVO: actividades.js
+ * ====================================================================
+ * Rutas CRUD para la gestión de actividades del sistema.
+ *
+ * Una actividad representa una tarea asignada a un usuario dentro
+ * de una sede. Cada actividad tiene un estado (Pendiente, En Progreso,
+ * Completada, Aprobada, Cancelada, Rechazada), una fecha límite y
+ * un tiempo estimado de duración.
+ *
+ * Las consultas incluyen JOIN con las tablas 'estado_actividad',
+ * 'usuario' y 'sede' para devolver información completa.
+ *
+ * Endpoints:
+ *   GET    /api/actividades                  → Listar todas
+ *   GET    /api/actividades/:id              → Obtener una por ID
+ *   GET    /api/actividades/usuario/:id      → Actividades de un usuario
+ *   POST   /api/actividades                  → Crear una actividad
+ *   PUT    /api/actividades/:id              → Actualizar (parcial)
+ *   DELETE /api/actividades/:id              → Eliminar una actividad
+ * ====================================================================
+ */
+
 const express = require('express');
 const router = express.Router();
 
-module.exports = function(pool) {
+module.exports = function (pool) {
 
+  /**
+   * GET /api/actividades
+   * ------------------------------------------------------------------
+   * Retorna todas las actividades con estado, usuario y sede.
+   * ------------------------------------------------------------------
+   */
   router.get('/', async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -18,6 +48,12 @@ module.exports = function(pool) {
     }
   });
 
+  /**
+   * GET /api/actividades/:id
+   * ------------------------------------------------------------------
+   * Retorna una actividad específica por su ID.
+   * ------------------------------------------------------------------
+   */
   router.get('/:id', async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -36,6 +72,13 @@ module.exports = function(pool) {
     }
   });
 
+  /**
+   * GET /api/actividades/usuario/:id_usuario
+   * ------------------------------------------------------------------
+   * Retorna todas las actividades asignadas a un usuario específico.
+   * Útil para mostrar las tareas de un operario en particular.
+   * ------------------------------------------------------------------
+   */
   router.get('/usuario/:id_usuario', async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -51,6 +94,25 @@ module.exports = function(pool) {
     }
   });
 
+  /**
+   * POST /api/actividades
+   * ------------------------------------------------------------------
+   * Crea una nueva actividad.
+   *
+   * Body esperado:
+   *   {
+   *     "nombre": "Instalar cableado",
+   *     "descripcion": "Cableado estructurado piso 3",
+   *     "fecha_limite": "2026-08-30",
+   *     "tiempo_estimado": 16.5,
+   *     "id_estado": 1,
+   *     "id_usuario": 1,
+   *     "id_sede": 1
+   *   }
+   *
+   * Nota: fecha_creacion se asigna automáticamente con CURRENT_TIMESTAMP.
+   * ------------------------------------------------------------------
+   */
   router.post('/', async (req, res) => {
     try {
       const { nombre, descripcion, fecha_limite, tiempo_estimado, id_estado, id_usuario, id_sede } = req.body;
@@ -58,16 +120,34 @@ module.exports = function(pool) {
         'INSERT INTO actividad (nombre, descripcion, fecha_limite, tiempo_estimado, id_estado, id_usuario, id_sede) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [nombre, descripcion, fecha_limite, tiempo_estimado, id_estado, id_usuario, id_sede]
       );
-      res.status(201).json({ id: result.insertId, nombre, descripcion, fecha_limite, tiempo_estimado, id_estado, id_usuario, id_sede });
+      res.status(201).json({
+        id: result.insertId, nombre, descripcion, fecha_limite,
+        tiempo_estimado, id_estado, id_usuario, id_sede
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
 
+  /**
+   * PUT /api/actividades/:id
+   * ------------------------------------------------------------------
+   * Actualiza una actividad existente (parcial update).
+   * Solo se actualizan los campos enviados en el body.
+   *
+   * Body esperado (campos opcionales):
+   *   {
+   *     "nombre": "Nuevo nombre",
+   *     "id_estado": 2,
+   *     "tiempo_estimado": 20.0
+   *   }
+   * ------------------------------------------------------------------
+   */
   router.put('/:id', async (req, res) => {
     try {
       const { nombre, descripcion, fecha_limite, tiempo_estimado, id_estado, id_usuario, id_sede } = req.body;
 
+      // Construir la consulta dinámicamente solo con los campos enviados
       const fields = [];
       const values = [];
 
@@ -82,7 +162,10 @@ module.exports = function(pool) {
       if (fields.length === 0) return res.status(400).json({ error: 'No hay campos para actualizar' });
 
       values.push(req.params.id);
-      const [result] = await pool.query(`UPDATE actividad SET ${fields.join(', ')} WHERE id_actividad = ?`, values);
+      const [result] = await pool.query(
+        `UPDATE actividad SET ${fields.join(', ')} WHERE id_actividad = ?`,
+        values
+      );
       if (result.affectedRows === 0) return res.status(404).json({ error: 'Actividad no encontrada' });
       res.json({ message: 'Actividad actualizada' });
     } catch (err) {
@@ -90,6 +173,12 @@ module.exports = function(pool) {
     }
   });
 
+  /**
+   * DELETE /api/actividades/:id
+   * ------------------------------------------------------------------
+   * Elimina una actividad por su ID.
+   * ------------------------------------------------------------------
+   */
   router.delete('/:id', async (req, res) => {
     try {
       const [result] = await pool.query('DELETE FROM actividad WHERE id_actividad = ?', [req.params.id]);
