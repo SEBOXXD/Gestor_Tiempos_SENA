@@ -37,6 +37,9 @@ const registrosRoutes = require('./src/routes/registros');
 const aprobacionesRoutes = require('./src/routes/aprobaciones');
 const dashboardRoutes = require('./src/routes/dashboard');
 const reportesRoutes = require('./src/routes/reportes');
+const historialRoutes = require('./src/routes/historial');
+const notificacionesRoutes = require('./src/routes/notificaciones');
+const contactoRoutes = require('./src/routes/contacto');
 
 // --- Inicialización de Express ---
 const app = express();
@@ -111,8 +114,11 @@ app.use('/api/turnos',       turnosRoutes(pool));
 app.use('/api/estados',      estadosRoutes(pool));
 app.use('/api/registros',    registrosRoutes(pool));
 app.use('/api/aprobaciones', aprobacionesRoutes(pool));
-app.use('/api/dashboard',    dashboardRoutes(pool));
-app.use('/api/reportes',     reportesRoutes(pool));
+app.use('/api/dashboard',        dashboardRoutes(pool));
+app.use('/api/reportes',         reportesRoutes(pool));
+app.use('/api/historial',        historialRoutes(pool));
+app.use('/api/notificaciones',   notificacionesRoutes(pool));
+app.use('/api/contacto',         contactoRoutes());
 
 // --- Iniciar servidor ---
 app.listen(PORT, () => {
