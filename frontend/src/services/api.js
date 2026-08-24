@@ -17,7 +17,10 @@
  * ====================================================================
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// En desarrollo (sin VITE_API_URL), se usa string vacío para que las
+// peticiones pasen por el proxy de Vite (/api → localhost:3000).
+// En producción (Railway), VITE_API_URL apunta al backend desplegado.
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 /**
  * Obtener el token JWT almacenado en localStorage.
@@ -43,8 +46,19 @@ function getHeaders() {
 /**
  * Procesar la respuesta de una petición fetch.
  * Lanza un error con el mensaje del backend si la respuesta no es OK.
+ * Maneja tanto respuestas JSON como HTML (cuando el backend no responde).
  */
 async function handleResponse(res) {
+  const contentType = res.headers.get('content-type') || '';
+
+  // Si la respuesta no es JSON (ej: HTML de error 404), lanzar error genérico
+  if (!contentType.includes('application/json')) {
+    if (!res.ok) {
+      throw new Error(`Error del servidor (${res.status}). Verifica que el backend esté corriendo.`);
+    }
+    throw new Error('La respuesta del servidor no es JSON válido.');
+  }
+
   const data = await res.json();
   if (!res.ok) {
     throw new Error(data.error || `Error ${res.status}`);
