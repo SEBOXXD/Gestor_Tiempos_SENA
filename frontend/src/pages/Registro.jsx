@@ -30,9 +30,7 @@ function Register() {
       await register({
         nombre,
         correo,
-        contrasena,
-        id_rol: 3,   // Operario por defecto
-        id_sede: 1   // Sede principal por defecto
+        contrasena
       })
       navigate("/inicio")
     } catch (err) {
