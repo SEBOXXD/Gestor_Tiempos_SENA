@@ -1,101 +1,89 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useAuth } from "../context/AuthContext"
+import { apiGet } from "../services/api"
 import "../styles/Jornada.css"
 import Sidebar from "../components/Sidebar"
 
-const turnosData = [
-  { id: 1, empleado: "Ana García", turno: "Mañana", entrada: "07:00", salida: "15:00", sede: "Sede A", estado: "activo" },
-  { id: 2, empleado: "Luis Martínez", turno: "Tarde", entrada: "15:00", salida: "23:00", sede: "Sede B", estado: "activo" },
-  { id: 3, empleado: "Carla Pérez", turno: "Mañana", entrada: "07:00", salida: "15:00", sede: "Sede A", estado: "completado" },
-  { id: 4, empleado: "Juan Rojas", turno: "Noche", entrada: "23:00", salida: "07:00", sede: "Sede C", estado: "activo" },
-  { id: 5, empleado: "Sofía Vargas", turno: "Tarde", entrada: "15:00", salida: "23:00", sede: "Sede B", estado: "pendiente" },
-  { id: 6, empleado: "Miguel Torres", turno: "Mañana", entrada: "07:00", salida: "15:00", sede: "Sede A", estado: "activo" },
-  { id: 7, empleado: "María López", turno: "Mañana", entrada: "07:00", salida: "15:00", sede: "Sede B", estado: "completado" },
-  { id: 8, empleado: "Carlos Ruiz", turno: "Noche", entrada: "23:00", salida: "07:00", sede: "Sede A", estado: "activo" },
-]
-
 function Jornada() {
-  const [turnos] = useState(turnosData)
+  const { user } = useAuth()
+  const [registros, setRegistros] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function cargar() {
+      try {
+        const data = await apiGet('/api/registros')
+        setRegistros(data)
+      } catch (err) {
+        console.error('Error cargando registros:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    cargar()
+  }, [])
+
+  const mapEstado = (nombreEstado) => {
+    const map = {
+      "Pendiente":   "pendiente",
+      "En Progreso": "activo",
+      "Completada":  "completado",
+      "Aprobada":    "completado",
+      "Cancelada":   "rechazado",
+      "Rechazada":   "rechazado",
+    }
+    return map[nombreEstado] || "pendiente"
+  }
 
   return (
     <div className="jornada-container">
-      <Sidebar activeItem="jornada" userName="Admin" userRole="Administrador" userInitial="A" />
+      <Sidebar activeItem="jornada" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
       <main className="jornada-main">
         <header className="page-header">
           <div className="page-header-left">
-            <h1>🕐 Turnos</h1>
+            <h1>Turnos</h1>
             <p>Gestión de jornadas laborales y horarios de empleados</p>
           </div>
-          <button className="btn-primary">+ Asignar turno</button>
         </header>
 
-        <section className="filters-bar">
-          <div className="filter-group">
-            <label>Turno</label>
-            <select className="filter-select">
-              <option>Todos</option>
-              <option>Mañana</option>
-              <option>Tarde</option>
-              <option>Noche</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Sede</label>
-            <select className="filter-select">
-              <option>Todas</option>
-              <option>Sede A</option>
-              <option>Sede B</option>
-              <option>Sede C</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Estado</label>
-            <select className="filter-select">
-              <option>Todos</option>
-              <option>Activo</option>
-              <option>Completado</option>
-              <option>Pendiente</option>
-            </select>
-          </div>
-          <button className="btn-filter">Filtrar</button>
-        </section>
-
         <section className="table-section">
-          <table className="reports-table">
-            <thead>
-              <tr>
-                <th>Empleado</th>
-                <th>Turno</th>
-                <th>Entrada</th>
-                <th>Salida</th>
-                <th>Sede</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {turnos.map((t) => (
-                <tr key={t.id}>
-                  <td>{t.empleado}</td>
-                  <td><span className="turno-tag">{t.turno}</span></td>
-                  <td>{t.entrada}</td>
-                  <td>{t.salida}</td>
-                  <td>{t.sede}</td>
-                  <td>
-                    <span className={`status-badge ${t.estado}`}>
-                      <span className="status-dot" />
-                      {t.estado === "activo" ? "Activo" : t.estado === "completado" ? "Completado" : "Pendiente"}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="action-btns">
-                      <button className="btn-icon" title="Editar">✏️</button>
-                      <button className="btn-icon" title="Ver detalles">👁️</button>
-                    </div>
-                  </td>
+          {loading ? (
+            <p>Cargando registros...</p>
+          ) : registros.length === 0 ? (
+            <p>No hay registros de jornada</p>
+          ) : (
+            <table className="reports-table">
+              <thead>
+                <tr>
+                  <th>Empleado</th>
+                  <th>Turno</th>
+                  <th>Fecha</th>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Horas</th>
+                  <th>Estado</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {registros.map((r) => (
+                  <tr key={r.id_registro}>
+                    <td>{r.usuario}</td>
+                    <td><span className="turno-tag">{r.nombre_turno}</span></td>
+                    <td>{r.fecha}</td>
+                    <td>{r.hora_entrada}</td>
+                    <td>{r.hora_salida || "---"}</td>
+                    <td>{r.total_horas ? `${r.total_horas}h` : "---"}</td>
+                    <td>
+                      <span className={`status-badge ${mapEstado(r.nombre_estado)}`}>
+                        <span className="status-dot" />
+                        {r.nombre_estado}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </section>
       </main>
     </div>

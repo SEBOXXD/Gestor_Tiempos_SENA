@@ -1,14 +1,32 @@
 import { useState } from "react"
+import { apiPost } from "../services/api"
 import "../styles/Contacto.css"
 import Sidebar from "../components/Sidebar"
 import Background from "../components/Background"
 
 function Contacto() {
   const [enviado, setEnviado] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setEnviado(true)
+    setError("")
+    setLoading(true)
+
+    const nombre = e.target["ct-nombre"].value
+    const correo = e.target["ct-email"].value
+    const asunto = e.target["ct-asunto"].value
+    const mensaje = e.target["ct-mensaje"].value
+
+    try {
+      await apiPost('/api/contacto', { nombre, correo, asunto, mensaje })
+      setEnviado(true)
+    } catch (err) {
+      setError(err.message || "Error al enviar el mensaje")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -16,7 +34,7 @@ function Contacto() {
       <Background />
       <div className="contacto-content">
         <header className="contacto-header">
-          <h1>📬 Contacto</h1>
+          <h1>Contacto</h1>
           <p>¿Tienes dudas, sugerencias o necesitas soporte? Escríbenos</p>
         </header>
 
@@ -33,6 +51,7 @@ function Contacto() {
               </div>
             ) : (
               <>
+                {error && <p className="error-message">{error}</p>}
                 <div className="input-group">
                   <input id="ct-nombre" type="text" required />
                   <label htmlFor="ct-nombre">Nombre completo</label>
@@ -54,7 +73,9 @@ function Contacto() {
                   <textarea id="ct-mensaje" className="contacto-textarea" rows={5} required />
                   <label htmlFor="ct-mensaje">Mensaje</label>
                 </div>
-                <button type="submit" className="btn-primary">Enviar mensaje →</button>
+                <button type="submit" className="btn-primary" disabled={loading}>
+                  {loading ? "Enviando..." : "Enviar mensaje"}
+                </button>
               </>
             )}
           </form>
