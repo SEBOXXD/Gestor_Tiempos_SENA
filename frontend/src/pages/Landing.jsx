@@ -49,9 +49,9 @@ function Landing() {
       <nav className="landing-nav">
         <span className="nav-logo">CHRONOS</span>
         <div className="nav-links">
-          <span className="nav-link">Características</span>
-          <span className="nav-link">Precios</span>
-          <span className="nav-link">Soporte</span>
+          <span className="nav-link" onClick={() => navigate("/caracteristicas")}>Características</span>
+          <span className="nav-link" onClick={() => navigate("/precios")}>Precios</span>
+          <span className="nav-link" onClick={() => navigate("/soporte")}>Soporte</span>
         </div>
         <button className="nav-cta" onClick={() => navigate("/")}>Iniciar sesión →</button>
       </nav>
@@ -144,9 +144,9 @@ function Landing() {
         <span className="footer-logo">CHRONOS</span>
         <span className="footer-copy">© 2026 CHRONOS · Proyecto SENA</span>
         <div className="footer-links">
-          <span className="footer-link">Términos</span>
-          <span className="footer-link">Privacidad</span>
-          <span className="footer-link">Soporte</span>
+          <span className="footer-link" onClick={() => navigate("/caracteristicas")}>Características</span>
+          <span className="footer-link" onClick={() => navigate("/precios")}>Precios</span>
+          <span className="footer-link" onClick={() => navigate("/soporte")}>Soporte</span>
         </div>
       </footer>
 

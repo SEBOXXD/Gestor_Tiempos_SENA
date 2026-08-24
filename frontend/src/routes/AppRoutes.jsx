@@ -15,6 +15,9 @@ import Notificaciones from "../pages/Notificaciones"
 import Auditoria      from "../pages/Auditoria"
 import Configuracion  from "../pages/Configuracion"
 import Contacto       from "../pages/Contacto"
+import Caracteristicas from "../pages/Caracteristicas"
+import Precios        from "../pages/Precios"
+import Soporte        from "../pages/Soporte"
 
 /**
  * ProtectedRoute
@@ -40,6 +43,9 @@ function AppRoutes() {
         <Route path="/register"      element={<Register />} />
         <Route path="/landing"       element={<Landing />} />
         <Route path="/contacto"      element={<Contacto />} />
+        <Route path="/caracteristicas" element={<Caracteristicas />} />
+        <Route path="/precios"       element={<Precios />} />
+        <Route path="/soporte"       element={<Soporte />} />
 
         {/* Rutas protegidas (requieren login) */}
         <Route path="/dashboard"     element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

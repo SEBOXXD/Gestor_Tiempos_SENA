@@ -1,10 +1,16 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { apiPost } from "../services/api"
 import "../styles/Contacto.css"
-import Sidebar from "../components/Sidebar"
 import Background from "../components/Background"
 
+/**
+ * Página pública de Contacto.
+ * Formulario que envía un email al soporte vía POST /api/contacto.
+ * Incluye barra de navegación de regreso al Landing.
+ */
 function Contacto() {
+  const navigate = useNavigate()
   const [enviado, setEnviado] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -32,6 +38,13 @@ function Contacto() {
   return (
     <div className="contacto-page">
       <Background />
+
+      {/* Barra de navegación */}
+      <nav className="contacto-nav">
+        <span className="contacto-nav-logo" onClick={() => navigate("/landing")}>CHRONOS</span>
+        <button className="btn-ghost" onClick={() => navigate("/landing")}>← Volver al inicio</button>
+      </nav>
+
       <div className="contacto-content">
         <header className="contacto-header">
           <h1>Contacto</h1>
@@ -39,6 +52,7 @@ function Contacto() {
         </header>
 
         <div className="contacto-grid">
+          {/* Formulario */}
           <form className="contacto-form" onSubmit={handleSubmit}>
             {enviado ? (
               <div className="contacto-success">
@@ -61,7 +75,7 @@ function Contacto() {
                   <label htmlFor="ct-email">Correo electrónico</label>
                 </div>
                 <div className="input-group">
-                  <select id="ct-asunto" className="filter-select contacto-select" required>
+                  <select id="ct-asunto" className="contacto-select" required>
                     <option value="">Selecciona un asunto</option>
                     <option>Soporte técnico</option>
                     <option>Sugerencia</option>
@@ -80,6 +94,7 @@ function Contacto() {
             )}
           </form>
 
+          {/* Tarjetas de información */}
           <div className="contacto-info">
             <div className="contacto-info-card">
               <span className="contacto-info-icon">📧</span>

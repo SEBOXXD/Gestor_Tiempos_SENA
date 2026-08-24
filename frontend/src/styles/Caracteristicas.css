@@ -1,0 +1,128 @@
+/* =============================================
+   CARACTERISTICAS.CSS — Página de módulos
+   ============================================= */
+
+.carac-page {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--white);
+  font-family: var(--font-main);
+  overflow-x: hidden;
+}
+
+/* Hero */
+.carac-hero {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 140px 40px 60px;
+  position: relative;
+}
+
+.carac-title {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.2;
+  max-width: 700px;
+  margin-bottom: 18px;
+}
+
+.carac-subtitle {
+  font-size: 16px;
+  color: rgba(167, 215, 215, 0.7);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* Grid de módulos */
+.carac-grid-section {
+  padding: 0 60px 80px;
+}
+
+.carac-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .carac-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .carac-grid { grid-template-columns: 1fr; }
+  .carac-title { font-size: 32px; }
+  .carac-grid-section { padding: 0 24px 60px; }
+}
+
+.carac-card {
+  background: rgba(31, 111, 111, 0.12);
+  border: 1px solid rgba(167, 215, 215, 0.1);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: transform 0.25s, border-color 0.25s;
+  animation: fadeUp 0.6s ease both;
+}
+
+.carac-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(44, 156, 156, 0.4);
+}
+
+.carac-card-icon {
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.carac-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.carac-card p {
+  font-size: 13px;
+  color: rgba(167, 215, 215, 0.7);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.carac-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.carac-details li {
+  font-size: 12px;
+  color: rgba(167, 215, 215, 0.6);
+  padding: 3px 0;
+}
+
+/* CTA */
+.carac-cta {
+  text-align: center;
+  padding: 60px 40px 80px;
+}
+
+.carac-cta h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.carac-cta p {
+  font-size: 15px;
+  color: rgba(167, 215, 215, 0.7);
+  margin-bottom: 28px;
+}
+
+.carac-cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
