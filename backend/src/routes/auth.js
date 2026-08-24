@@ -70,6 +70,16 @@ module.exports = function (pool) {
         return res.status(400).json({ error: 'El correo ya está registrado' });
       }
 
+      // Si no se envía id_sede, buscar la sede por defecto (la primera disponible)
+      let sedeFinal = id_sede;
+      if (!sedeFinal) {
+        const [sedes] = await pool.query('SELECT id_sede FROM sede LIMIT 1');
+        sedeFinal = sedes.length > 0 ? sedes[0].id_sede : null;
+      }
+
+      // Si no se envía id_rol, asignar Operario (3) por defecto
+      const rolFinal = id_rol || 3;
+
       // Hashear la contraseña antes de guardarla
       // genSalt(10) genera 10 rondas de salt → seguro contra rainbow tables
       const salt = await bcrypt.genSalt(10);
@@ -78,7 +88,7 @@ module.exports = function (pool) {
       // Insertar el usuario en la base de datos
       const [result] = await pool.query(
         'INSERT INTO usuario (nombre, correo, contrasena, id_rol, id_sede) VALUES (?, ?, ?, ?, ?)',
-        [nombre, correo, hashedPassword, id_rol, id_sede]
+        [nombre, correo, hashedPassword, rolFinal, sedeFinal]
       );
 
       // Generar token JWT con el id y correo del usuario nuevo
