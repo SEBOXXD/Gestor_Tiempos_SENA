@@ -1,243 +1,523 @@
-# Proyecto: Sistema de Registro de Turnos para Microempresas
+# CHRONOS — Sistema de Gestión de Tiempos SENA
 
-## Descripción General
-
-Este proyecto consiste en el desarrollo de un software dirigido a **microempresas y negocios pequeños**, con el objetivo de **gestionar los turnos de trabajo** de sus empleados. La herramienta permitirá registrar entradas y salidas, asignar actividades, aprobar registros y mantener control de asistencia, adaptándose a estructuras organizativas simples pero funcionales.
-
-El sistema busca optimizar la gestión de horarios, ofrecer transparencia en las horas trabajadas y facilitar la supervisión de turnos.
+Plataforma web para la gestión de turnos, actividades y reportes de microempresas. Permite registrar entrada y salida de empleados, asignar tareas, aprobar registros y generar reportes automáticos.
 
 ---
 
-## Objetivos del Proyecto
+## Tabla de Contenidos
 
-* Permitir el **registro de entrada y salida** de los empleados de manera digital.
-* Implementar un flujo de **aprobación de registros** por parte de los supervisores.
-* Gestionar la información relacionada con **sedes, horarios, usuarios y actividades**.
-* Facilitar la **evaluación y control de asistencia** en cada sede.
-* Mejorar la **eficiencia administrativa** de pequeñas empresas sin necesidad de herramientas complejas.
-
----
-
-## Alcance del Proyecto
-
-El sistema estará compuesto por los siguientes módulos:
-
-1. **Gestor de Sedes:** Definición de las sedes o puntos de trabajo.
-2. **Gestor de Horarios:** Creación de turnos, jornadas laborales y franjas horarias.
-3. **Gestor de Usuarios:** Registro de empleados, supervisores y administradores.
-4. **Registro de Entrada y Salida:** Registro digital de horas con aprobación.
-5. **Módulo de Actividades:** Registro de tareas realizadas durante el turno. (Los Supervisores o Administradores podrán asignar las tareas a cada empleado, y el empleado, al registrar el turno, podrá agregar actividades adicionales que le hayan asignado durante dicho turno)
-6. **Módulo de Aprobaciones:** Validación de registros por supervisores.
-7. **Módulo de Evaluación:** Reportes de asistencia y cumplimiento.
+- [Tecnologías](#tecnologías)
+- [Módulos del Sistema](#módulos-del-sistema)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Requisitos Previos](#requisitos-previos)
+- [Instalación y Arranque Local](#instalación-y-arranque-local)
+- [Variables de Entorno](#variables-de-entorno)
+- [Despliegue en Railway](#despliegue-en-railway)
+- [Base de Datos](#base-de-datos)
+- [API Endpoints](#api-endpoints)
+- [Rutas del Frontend](#rutas-del-frontend)
+- [Roles y Permisos](#roles-y-permisos)
+- [Flujo del Sistema](#flujo-del-sistema)
+- [Próximos Pasos](#próximos-pasos)
 
 ---
 
-## Clasificación de Procesos
+## Tecnologías
 
-| Tipo de Proceso              | Procesos Asociados                                                          |
-| ---------------------------- | --------------------------------------------------------------------------- |
-| **Estratégicos**             | Planificación de horarios, asignación de roles, análisis de productividad   |
-| **Misionales (Principales)** | Registro de entrada y salida, registro de actividades, aprobación de turnos |
-| **De Apoyo**                 | Gestión de usuarios, mantenimiento del sistema, soporte técnico             |
-| **De Evaluación o Control**  | Generación de reportes, verificación de registros, auditorías de asistencia |
-
----
-
-## Descripción del Proceso Principal: Registro de Entrada y Salida
-
-### Objetivo
-
-Registrar de forma precisa la **hora de entrada y salida** de cada empleado, asociando sus actividades diarias y garantizando su validación por parte del supervisor.
-
-### Participantes
-
-* **Empleado:** Realiza el registro de entrada, actividades y salida.
-* **Sistema:** Valida horarios y almacena los datos.
-* **Supervisor:** Revisa y aprueba los registros enviados.
-
-### Flujo BPMN del Proceso
-
-1. El **empleado** inicia sesión en el sistema.
-2. Se **validan las credenciales**.
-3. Selecciona **sede y turno asignado**.
-4. Registra la **hora de entrada**.
-5. Durante el turno, **registra actividades**.
-6. Al finalizar, registra la **hora de salida**.
-7. El sistema **envía el registro al supervisor**.
-8. El supervisor **aprueba o rechaza** el registro.
-9. El sistema **actualiza el estado** (Aprobado/Rechazado).
-10. Se **genera un resumen** de horas trabajadas y actividades.
+| Capa | Tecnología | Versión |
+|------|-----------|---------|
+| Frontend | React + Vite | React 19 / Vite 5 |
+| Backend | Node.js + Express | Node 18+ |
+| Base de Datos | MySQL | Railway MySQL |
+| Autenticación | JWT (JSON Web Tokens) | — |
+| Hash de Contraseñas | bcryptjs | — |
+| Email | Nodemailer (Gmail SMTP) | — |
+| Despliegue | Railway | — |
 
 ---
 
-## Entradas, Salidas y Reglas del Proceso
+## Módulos del Sistema
 
-| Elemento              | Descripción                                                                                                                                                                                                                                                               |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Entradas**          | Datos del empleado, horario asignado, sede, hora de entrada, hora de salida, actividades realizadas                                                                                                                                                                       |
-| **Salidas**           | Registro validado, resumen de jornada, estado de aprobación                                                                                                                                                                                                               |
-| **Reglas de Negocio** | 1. Solo se puede registrar entrada si el turno está activo. <br> 2. Cada registro debe ser aprobado por un supervisor. <br> 3. Los registros pueden ser modificados antes de ser enviados. <br> 4. Los reportes se generan automáticamente según el estado de aprobación. |
+### 1. Autenticación y Seguridad
+- Registro de nuevos usuarios con validación de correo único
+- Inicio de sesión con JWT (tokens de 24 horas)
+- Contraseñas hasheadas con bcrypt (10 rounds de salt)
+- Rutas protegidas que requieren autenticación
+- Cierre de sesión con limpieza de token
+
+### 2. Gestión de Usuarios
+- CRUD completo de usuarios (Crear, Leer, Actualizar, Eliminar)
+- Asignación de roles (Administrador, Supervisor, Operario)
+- Asignación de sedes
+- Cambio de contraseña
+- Búsqueda y filtrado de usuarios
+
+### 3. Gestión de Sedes
+- Registro de sedes con nombre, ubicación y teléfono
+- Las sedes se asignan a usuarios y actividades
+
+### 4. Gestión de Turnos
+- CRUD de turnos con nombre, hora de inicio y hora de fin
+- Cada turno define la franja horaria laboral
+
+### 5. Gestión de Actividades
+- CRUD de actividades con nombre, descripción y fecha límite
+- Asignación de actividades a usuarios específicos
+- Estados: Pendiente, En Progreso, Completada
+- Filtrado de actividades por usuario
+
+### 6. Registro de Jornada (Entrada/Salida)
+- Registro de entrada con timestamp automático
+- Registro de salida con cálculo automático de horas trabajadas
+- El sistema usa `TIME_TO_SEC` para calcular la diferencia entre entrada y salida
+- Cada registro se asocia a un turno y un usuario
+
+### 7. Aprobaciones
+- Los supervisores revisan registros pendientes
+- Opción de aprobar o rechazar con comentario
+- Al aprobar, se actualiza automáticamente el estado del registro a "Completada"
+- Al rechazar, se actualiza a "Rechazada"
+- Historial de todas las decisiones
+
+### 8. Dashboard y Reportes
+- **Resumen ejecutivo**: horas totales, usuarios activos, aprobaciones, actividades
+- **Actividades por estado**: conteo de pendientes, en progreso y completadas
+- **Horas por turno**: distribución de horas trabajadas por cada turno
+- **Horas por empleado**: ranking de horas trabajadas por usuario
+- **Registros recientes**: últimas 10 entradas/salidas
+- **Resumen de aprobaciones**: pendientes, aprobadas y rechazadas
+- **Generación de reportes**: horas trabajadas, actividades y asistencia en tiempo real
+
+### 9. Notificaciones
+- Creación automática de notificaciones para eventos del sistema
+- Conteo de notificaciones no leídas
+- Marcado individual como leída
+- Marcado de todas como leídas
+- Filtrado: todas vs. no leídas
+
+### 10. Auditoría (Historial)
+- Registro automático de cada acción realizada en el sistema
+- Qué acción se realizó, por quién y cuándo
+- Tabla completa con filtros por usuario
+
+### 11. Contacto
+- Formulario público de contacto (nombre, correo, asunto, mensaje)
+- Envío de email al soporte vía Nodemailer + Gmail SMTP
+- Página independiente sin necesidad de iniciar sesión
+
+### 12. Páginas Públicas (Landing)
+- **Inicio**: presentación del sistema con estadísticas y funcionalidades destacadas
+- **Características**: descripción detallada de los 6 módulos principales
+- **Precios**: 3 planes (Básico gratis, Profesional, Empresarial) con FAQ
+- **Soporte**: canales de contacto y preguntas frecuentes
+- **Contacto**: formulario de soporte con información de contacto
 
 ---
 
-## Tecnologías Propuestas
+## Estructura del Proyecto
 
-* **Backend:** Node.js / Express.js
-* **Base de Datos:** MySQL / phpMyAdmin
-* **Frontend:** HTML, CSS, JavaScript, EJS (para vistas dinámicas)
-* **Integraciones:** Correo electrónico para notificaciones de aprobación
+```
+Gestor_Tiempos_SENA/
+├── backend/                    # API REST con Node.js + Express
+│   ├── index.js                # Punto de entrada del servidor
+│   ├── package.json            # Dependencias del backend
+│   ├── database/
+│   │   └── chronos_db.sql      # Esquema completo de la base de datos
+│   └── src/
+│       ├── middleware/
+│       │   └── auth.js         # Middleware de autenticación JWT
+│       └── routes/
+│           ├── auth.js         # Registro e inicio de sesión
+│           ├── sedes.js        # CRUD de sedes
+│           ├── roles.js        # CRUD de roles
+│           ├── usuarios.js     # CRUD de usuarios + cambio de contraseña
+│           ├── actividades.js  # CRUD de actividades + filtrado
+│           ├── turnos.js       # CRUD de turnos
+│           ├── estados.js      # CRUD de estados de actividad
+│           ├── registros.js    # Registro de entrada/salida + cálculo
+│           ├── aprobaciones.js # Aprobación/rechazo de registros
+│           ├── dashboard.js    # Endpoints de KPIs y reportes
+│           ├── reportes.js     # CRUD de reportes + generación
+│           ├── historial.js    # Registro de auditoría
+│           ├── notificaciones.js # CRUD de notificaciones
+│           └── contacto.js     # Envío de email de contacto
+├── frontend/                   # UI con React + Vite
+│   ├── index.html
+│   ├── package.json            # Dependencias del frontend
+│   ├── vite.config.js          # Configuración de Vite + proxy API
+│   └── src/
+│       ├── main.jsx            # Punto de entrada de React
+│       ├── App.jsx             # Componente raíz con AuthProvider
+│       ├── context/
+│       │   └── AuthContext.jsx # Estado global de autenticación
+│       ├── routes/
+│       │   └── AppRoutes.jsx   # Definición de rutas públicas y protegidas
+│       ├── services/
+│       │   └── api.js          # Cliente HTTP con soporte JWT
+│       ├── components/
+│       │   ├── Sidebar.jsx     # Menú lateral de navegación
+│       │   └── Background.jsx  # Fondo animado con partículas
+│       ├── pages/
+│       │   ├── Login.jsx           # Inicio de sesión
+│       │   ├── Registro.jsx        # Creación de cuenta
+│       │   ├── Landing.jsx         # Página de presentación
+│       │   ├── Inicio.jsx          # Panel principal del usuario
+│       │   ├── Dashboard.jsx       # Resumen ejecutivo con KPIs
+│       │   ├── Usuarios.jsx        # Gestión de empleados
+│       │   ├── Actividades.jsx     # Gestión de tareas
+│       │   ├── Jornada.jsx         # Registro de entrada/salida
+│       │   ├── Aprobaciones.jsx    # Aprobación de registros
+│       │   ├── Reportes.jsx        # Reportes y estadísticas
+│       │   ├── Notificaciones.jsx  # Centro de notificaciones
+│       │   ├── Auditoria.jsx       # Historial de acciones
+│       │   ├── Configuracion.jsx   # Perfil y ajustes
+│       │   ├── Contacto.jsx        # Formulario de contacto
+│       │   ├── Caracteristicas.jsx # Módulos del sistema
+│       │   ├── Precios.jsx         # Planes y precios
+│       │   └── Soporte.jsx         # Centro de ayuda
+│       └── styles/                 # Archivos CSS por página
+│           ├── index.css           # Variables globales y reset
+│           ├── Background.css      # Estilos del canvas animado
+│           ├── login.css
+│           ├── register.css
+│           ├── Landing.css
+│           ├── Inicio.css
+│           ├── Dashboard.css
+│           ├── Usuarios.css
+│           ├── Actividades.css
+│           ├── Jornada.css
+│           ├── Aprobaciones.css
+│           ├── Reportes.css
+│           ├── Notificaciones.css
+│           ├── Auditoria.css
+│           ├── Configuracion.css
+│           ├── Contacto.css
+│           ├── Caracteristicas.css
+│           ├── Precios.css
+│           └── Soporte.css
+├── package.json                # Script raíz para arrancar ambos servicios
+├── .gitignore
+└── README.md
+```
 
 ---
 
-## Diagrama BPMN (Resumen)
+## Requisitos Previos
 
-El proceso BPMN incluye los siguientes actores y pasos principales:
-
-* **Empleado:** Inicia sesión, selecciona sede, registra entrada/salida, registra actividades.
-* **Sistema:** Valida horarios, almacena registros, genera reportes.
-* **Supervisor:** Revisa y aprueba o rechaza registros.
-
-El flujo garantiza trazabilidad y control sobre cada acción realizada dentro del sistema.
+- **Node.js** v18 o superior
+- **npm** v9 o superior
+- **Cuenta de Gmail** (para enviar emails de contacto, opcional)
 
 ---
 
-## Indicadores Clave (KPIs)
+## Instalación y Arranque Local
 
-* Porcentaje de registros aprobados vs rechazados.
-* Tiempo promedio de aprobación por supervisor.
-* Porcentaje de asistencia por sede.
-* Promedio de horas trabajadas por empleado.
+### Opción 1: Arrancar ambos servicios con un solo comando
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/SEBOXXD/Gestor_Tiempos_SENA.git
+cd Gestor_Tiempos_SENA
+
+# Instalar dependencias raíz (concurrently)
+npm install
+
+# Arrancar backend y frontend simultáneamente
+npm run dev
+```
+
+Esto inicia:
+- Backend en `http://localhost:3000`
+- Frontend en `http://localhost:5173`
+
+### Opción 2: Arrancar cada servicio por separado
+
+**Terminal 1 — Backend:**
+```bash
+cd backend
+npm install
+node index.js
+```
+
+**Terminal 2 — Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Verificar que funciona
+
+1. Abre `http://localhost:5173` en tu navegador
+2. Deberías ver la pantalla de inicio de sesión
+3. Regístrate con un correo nuevo y contraseña
+4. Inicia sesión y navega por el sistema
 
 ---
 
-## Beneficios Esperados
+## Variables de Entorno
 
-* Reducción de errores manuales en los registros.
-* Mayor transparencia y control de asistencia.
-* Aumento en la eficiencia administrativa.
-* Trazabilidad completa de cada registro.
-* Informes claros para la toma de decisiones.
+### Backend (`backend/.env`)
+
+| Variable | Descripción | Ejemplo |
+|----------|------------|---------|
+| `DB_HOST` | Host de la base de datos MySQL | `caboose.proxy.rlwy.net` |
+| `DB_PORT` | Puerto de la base de datos | `25164` |
+| `DB_USER` | Usuario de la base de datos | `root` |
+| `DB_PASSWORD` | Contraseña de la base de datos | `***` |
+| `DB_NAME` | Nombre de la base de datos | `railway` |
+| `JWT_SECRET` | Clave secreta para firmar tokens | `mi_clave_secreta` |
+| `EMAIL_USER` | Correo de Gmail para enviar emails | `tu@gmail.com` |
+| `EMAIL_PASS` | Contraseña de aplicación de Gmail | `xxxx xxxx xxxx xxxx` |
+
+### Frontend (`frontend/.env`)
+
+| Variable | Descripción | Valor en Local | Valor en Railway |
+|----------|------------|----------------|------------------|
+| `VITE_API_URL` | URL base del backend | *(vacío — usa proxy de Vite)* | `https://backend-production-xxxx.up.railway.app` |
+
+---
+
+## Despliegue en Railway
+
+### Servicios necesarios
+
+Railway despliega 3 servicios independientes:
+
+| Servicio | Source Directory | Puerto | Descripción |
+|----------|-----------------|--------|-------------|
+| **Backend** | `backend` | 3000 | API REST |
+| **Frontend** | `frontend` | $PORT | Aplicación React |
+| **MySQL** | — | — | Base de datos |
+
+### Pasos para configurar
+
+1. **Crear proyecto en Railway** y conectar el repositorio de GitHub
+2. **Agregar servicio MySQL** desde el panel de Railway
+3. **Agregar servicio Backend**:
+   - Source Directory: `backend`
+   - Las variables de entorno de MySQL se inyectan automáticamente
+4. **Agregar servicio Frontend**:
+   - Source Directory: `frontend`
+   - Agregar variable: `VITE_API_URL` = URL pública del servicio Backend
+5. **Configurar variables de entorno** del Backend:
+   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` (de MySQL)
+   - `JWT_SECRET`
+   - `EMAIL_USER`, `EMAIL_PASS` (opcional, para contacto)
+
+### Variables de entorno críticas
+
+> **Nota importante:** `VITE_API_URL` es una variable de **build time** en Vite. Si no se configura antes del build, el frontend no podrá comunicarse con el backend en producción. Después de agregar la variable, ejecuta un **Redeploy** del servicio Frontend.
+
+---
+
+## Base de Datos
+
+### Tablas principales
+
+| Tabla | Descripción |
+|-------|------------|
+| `rol` | Roles del sistema (Administrador, Supervisor, Operario) |
+| `sede` | Sedes o puntos de trabajo |
+| `estado_actividad` | Estados posibles de una actividad |
+| `turno` | Turnos laborales con horario definido |
+| `usuario` | Usuarios del sistema con credenciales |
+| `actividad` | Tareas asignadas a usuarios |
+| `registro_hora` | Registros de entrada y salida |
+| `aprobacion` | Decisiones de aprobación/rechazo |
+| `historial` | Auditoría de acciones del sistema |
+| `reporte` | Reportes generados |
+| `notificacion` | Notificaciones del sistema |
+
+### Vistas
+
+| Vista | Descripción |
+|-------|------------|
+| `vista_horas_por_usuario` | Total de horas trabajadas por cada usuario |
+| `vista_actividades_pendientes` | Actividades con estado Pendiente |
+| `vista_resumen_aprobaciones` | Resumen de aprobaciones por estado |
+
+### Script de creación
+
+El esquema completo se encuentra en `backend/database/chronos_db.sql`.
+
+---
+
+## API Endpoints
+
+### Autenticación
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `POST` | `/api/auth/register` | Registrar nuevo usuario | No |
+| `POST` | `/api/auth/login` | Iniciar sesión | No |
+
+### Usuarios
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/usuarios` | Listar todos los usuarios | Sí |
+| `GET` | `/api/usuarios/:id` | Obtener usuario por ID | Sí |
+| `POST` | `/api/usuarios` | Crear usuario | Sí |
+| `PUT` | `/api/usuarios/:id` | Actualizar usuario | Sí |
+| `DELETE` | `/api/usuarios/:id` | Eliminar usuario | Sí |
+| `PUT` | `/api/usuarios/:id/password` | Cambiar contraseña | Sí |
+
+### Sedes
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/sedes` | Listar sedes | Sí |
+| `POST` | `/api/sedes` | Crear sede | Sí |
+| `PUT` | `/api/sedes/:id` | Actualizar sede | Sí |
+| `DELETE` | `/api/sedes/:id` | Eliminar sede | Sí |
+
+### Turnos
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/turnos` | Listar turnos | Sí |
+| `POST` | `/api/turnos` | Crear turno | Sí |
+| `PUT` | `/api/turnos/:id` | Actualizar turno | Sí |
+| `DELETE` | `/api/turnos/:id` | Eliminar turno | Sí |
+
+### Actividades
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/actividades` | Listar actividades | Sí |
+| `GET` | `/api/actividades/usuario/:id` | Actividades de un usuario | Sí |
+| `POST` | `/api/actividades` | Crear actividad | Sí |
+| `PUT` | `/api/actividades/:id` | Actualizar actividad | Sí |
+| `DELETE` | `/api/actividades/:id` | Eliminar actividad | Sí |
+
+### Registro de Jornada
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/registros` | Listar registros | Sí |
+| `GET` | `/api/registros/usuario/:id` | Registros de un usuario | Sí |
+| `POST` | `/api/registros/entrada` | Registrar entrada | Sí |
+| `PUT` | `/api/registros/salida/:id` | Registrar salida | Sí |
+
+### Aprobaciones
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/aprobaciones` | Listar aprobaciones | Sí |
+| `GET` | `/api/aprobaciones/pendientes` | Aprobaciones pendientes | Sí |
+| `POST` | `/api/aprobaciones` | Aprobar/rechazar registro | Sí |
+
+### Dashboard
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/dashboard/resumen` | KPIs generales | Sí |
+| `GET` | `/api/dashboard/actividades` | Actividades por estado | Sí |
+| `GET` | `/api/dashboard/turnos` | Horas por turno | Sí |
+| `GET` | `/api/dashboard/recientes` | Registros recientes | Sí |
+| `GET` | `/api/dashboard/horas` | Horas por usuario | Sí |
+| `GET` | `/api/dashboard/aprobaciones` | Resumen de aprobaciones | Sí |
+
+### Reportes
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/reportes` | Listar reportes | Sí |
+| `POST` | `/api/reportes/generar` | Generar reporte en tiempo real | Sí |
+
+### Notificaciones
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/notificaciones/usuario/:id` | Notificaciones de un usuario | Sí |
+| `GET` | `/api/notificaciones/no-leidas/:id` | Conteo de no leídas | Sí |
+| `POST` | `/api/notificaciones` | Crear notificación | Sí |
+| `PUT` | `/api/notificaciones/leer/:id` | Marcar como leída | Sí |
+| `PUT` | `/api/notificaciones/leer-todas/:id` | Marcar todas como leídas | Sí |
+
+### Auditoría
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/historial` | Listar historial | Sí |
+| `POST` | `/api/historial` | Registrar acción | Sí |
+
+### Contacto
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `POST` | `/api/contacto` | Enviar email de contacto | No |
+
+---
+
+## Rutas del Frontend
+
+### Páginas Públicas (no requieren sesión)
+
+| Ruta | Página | Descripción |
+|------|--------|-------------|
+| `/` | Login | Inicio de sesión |
+| `/register` | Registro | Creación de cuenta nueva |
+| `/landing` | Landing | Página de presentación del sistema |
+| `/caracteristicas` | Características | Descripción de los módulos |
+| `/precios` | Precios | Planes y tarifas |
+| `/soporte` | Soporte | Centro de ayuda y FAQ |
+| `/contacto` | Contacto | Formulario de soporte |
+
+### Páginas Protegidas (requieren sesión)
+
+| Ruta | Página | Descripción |
+|------|--------|-------------|
+| `/inicio` | Inicio | Panel principal con actividad reciente |
+| `/dashboard` | Dashboard | Resumen ejecutivo con KPIs |
+| `/usuarios` | Usuarios | Gestión de empleados |
+| `/actividades` | Actividades | Gestión de tareas asignadas |
+| `/jornada` | Turnos | Registro de entrada y salida |
+| `/aprobaciones` | Aprobaciones | Revisión y aprobación de registros |
+| `/reportes` | Reportes | Estadísticas e informes |
+| `/notificaciones` | Notificaciones | Centro de alertas |
+| `/auditoria` | Auditoría | Historial de acciones del sistema |
+| `/configuracion` | Configuración | Perfil y ajustes del usuario |
+
+---
+
+## Roles y Permisos
+
+| Rol | Descripción | Acciones |
+|-----|------------|----------|
+| **Administrador** | Control total del sistema | Crear, editar y eliminar usuarios, sedes, turnos, actividades. Aprobar registros. Ver reportes y auditoría completa. |
+| **Supervisor** | Supervisión de equipo | Aprobar/rechazar registros. Asignar actividades. Ver reportes de su equipo. |
+| **Operario** | Empleado estándar | Registrar entrada/salida. Ver sus actividades y notificaciones. Actualizar su perfil. |
+
+---
+
+## Flujo del Sistema
+
+1. El **Empleado** inicia sesión y va a **Jornada**
+2. Registra su **hora de entrada** (asociada a un turno)
+3. Durante el turno, visualiza sus **actividades asignadas**
+4. Al finalizar, registra su **hora de salida**
+5. El sistema **calcula automáticamente** las horas trabajadas
+6. El **Supervisor** revisa los registros en **Aprobaciones**
+7. **Aprueba o rechaza** cada registro con un comentario
+8. El **Administrador** revisa **Dashboard** y **Reportes** para tomar decisiones
+9. Todas las quedar registradas en **Auditoría**
 
 ---
 
 ## Próximos Pasos
 
-1. Diseñar las tablas base de datos (Usuarios, Turnos, Actividades, Aprobaciones, Sedes, Registros).
-2. Crear prototipo de interfaz para el registro de horarios.
-3. Implementar el flujo de aprobación.
-4. Generar reportes automáticos y panel de control.
+- [ ] Conectar variables de entorno en Railway (`VITE_API_URL`)
+- [ ] Configurar envío de emails con Nodemailer (Gmail SMTP)
+- [ ] Agregar paginación y búsqueda avanzada
+- [ ] Implementar exportación de reportes a PDF/Excel
+- [ ] Agregar filtros por fecha en reportes
+- [ ] Notificaciones en tiempo real (WebSocket)
+- [ ] Modo oscuro / personalización de temas
 
 ---
 
 **Autor:** Papasito
-**Versión:** 1.0
-**Propósito:** Documento base para la planificación y desarrollo del Sistema de Registro de Turnos.
-
----
-#Adicionales
-1. Modulo de Gestor de Recursos: El módulo de Gestión de Recursos en tu proyecto tiene la función de administrar y controlar los recursos (humanos, materiales y temporales) que se utilizan en las actividades o tareas asignadas dentro del sistema.
-Supón que hay una actividad llamada “Revisión de inventario en Sede A”.
-El coordinador la crea y asigna los siguientes recursos:
-
-Humano: María López.
-
-Material: Tablet Samsung.
-
-Tiempo: 2 horas estimadas.
-
-El sistema:
-
-Marca la tablet como “En uso” durante el rango asignado.
-
-Guarda el registro en el historial de uso del recurso.
-
-Una vez finalizada la actividad, cambia su estado a “Disponible” y calcula el tiempo real utilizado.
-
----
-
-## Inicialización del Proyecto
-
-### Requisitos
-
-- **Node.js** v18 o superior
-- **npm** v9 o superior
-
-### Frontend
-
-```bash
-# Entrar al directorio del frontend
-cd frontend
-
-# Instalar dependencias
-npm install
-
-# Iniciar servidor de desarrollo (http://localhost:5173)
-npm run dev
-
-# Compilar para producción
-npm run build
-
-# Vista previa de la compilación
-npm run preview
-
-# Verificar lint
-npm run lint
-```
-
-### Backend
-
-```bash
-# Entrar al directorio del backend
-cd backend
-
-# Instalar dependencias
-npm install
-
-# Iniciar servidor (requiere implementar app.js)
-npm start
-```
-
-### Estructura del Proyecto
-
-```
-Gestor_Tiempos_SENA/
-├── backend/               # API REST con Node.js + Express
-│   └── src/
-│       ├── app.js         # Punto de entrada
-│       ├── controllers/   # Lógica de negocio
-│       ├── models/        # Modelos de datos
-│       ├── routes/        # Definición de rutas
-│       └── services/      # Servicios auxiliares
-├── database/              # Esquemas y scripts SQL
-├── docs/                  # Documentación adicional
-├── frontend/              # UI con React + Vite
-│   └── src/
-│       ├── components/    # Componentes reutilizables
-│       ├── pages/         # Páginas de la aplicación
-│       ├── routes/        # Configuración de rutas
-│       ├── styles/        # Hojas de estilo CSS
-│       ├── context/       # Contextos de React
-│       ├── hooks/         # Hooks personalizados
-│       ├── services/      # Servicios de API
-│       └── assets/        # Recursos estáticos
-└── README.md
-```
-
-### Rutas del Frontend
-
-| Ruta              | Página            | Descripción                          |
-| ----------------- | ----------------- | ------------------------------------ |
-| `/`               | Login             | Inicio de sesión                     |
-| `/register`       | Registro          | Creación de cuenta                   |
-| `/landing`        | Landing           | Página de presentación               |
-| `/inicio`         | Inicio            | Panel principal del usuario          |
-| `/dashboard`      | Dashboard         | Resumen ejecutivo                    |
-| `/usuarios`       | Usuarios          | Gestión de empleados                 |
-| `/jornada`        | Turnos            | Gestión de jornadas laborales        |
-| `/aprobaciones`   | Aprobaciones      | Aprobación de registros              |
-| `/actividades`    | Actividades       | Gestión de tareas                    |
-| `/reportes`       | Reportes          | Reportes y estadísticas              |
-| `/notificaciones` | Notificaciones    | Centro de notificaciones             |
-| `/auditoria`      | Auditoría         | Historial de acciones                |
-| `/configuracion`  | Configuración     | Ajustes del sistema                  |
-| `/contacto`       | Contacto          | Formulario de contacto               |
+**Versión:** 2.0
+**Proyecto SENA** — Gestor de Tiempos para Microempresas
