@@ -1,5 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
+/**
+ * Menú lateral de navegación.
+ * Obtiene los datos del usuario desde AuthContext (ya no usa props).
+ * Incluye botón de cerrar sesión que limpia el JWT del localStorage.
+ */
 const menuSections = [
   {
     label: "Principal",
@@ -21,9 +27,19 @@ const menuSections = [
   },
 ]
 
-function Sidebar({ userName = "Admin", userRole = "Administrador", userInitial = "A" }) {
+function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user, logout } = useAuth()
+
+  const userName = user?.nombre || "Usuario"
+  const userRole = user?.rol || "Sin rol"
+  const userInitial = user?.nombre?.[0]?.toUpperCase() || "U"
+
+  function handleLogout() {
+    logout()
+    navigate("/")
+  }
 
   return (
     <aside className="sidebar">
@@ -50,6 +66,10 @@ function Sidebar({ userName = "Admin", userRole = "Administrador", userInitial =
 
       <div className="nav-item" onClick={() => navigate("/configuracion")}>
         <span className="nav-icon">⚙️</span> Configuración
+      </div>
+
+      <div className="nav-item" onClick={handleLogout} style={{ color: "#f87171" }}>
+        <span className="nav-icon">🚪</span> Cerrar sesión
       </div>
 
       <div className="sidebar-user">

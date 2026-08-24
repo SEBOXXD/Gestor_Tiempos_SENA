@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "../context/AuthContext"
+
 import { apiGet } from "../services/api"
 import "../styles/Auditoria.css"
 import Sidebar from "../components/Sidebar"
 
 function Auditoria() {
-  const { user } = useAuth()
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -25,7 +24,7 @@ function Auditoria() {
 
   return (
     <div className="auditoria-container">
-      <Sidebar activeItem="auditoria" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="auditoria-main">
         <header className="page-header">
           <div className="page-header-left">

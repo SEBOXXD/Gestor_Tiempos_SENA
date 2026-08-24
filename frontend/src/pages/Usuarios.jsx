@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "../context/AuthContext"
+
 import { apiGet } from "../services/api"
 import "../styles/Usuarios.css"
 import Sidebar from "../components/Sidebar"
@@ -11,7 +11,6 @@ const rolColors = {
 }
 
 function Usuarios() {
-  const { user } = useAuth()
   const [users, setUsers] = useState([])
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
@@ -38,7 +37,7 @@ function Usuarios() {
 
   return (
     <div className="usuarios-container">
-      <Sidebar activeItem="usuarios" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="usuarios-main">
         <header className="page-header">
           <div className="page-header-left">

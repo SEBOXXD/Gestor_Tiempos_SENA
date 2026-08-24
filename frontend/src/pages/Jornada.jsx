@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "../context/AuthContext"
+
 import { apiGet } from "../services/api"
 import "../styles/Jornada.css"
 import Sidebar from "../components/Sidebar"
 
 function Jornada() {
-  const { user } = useAuth()
   const [registros, setRegistros] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -37,7 +36,7 @@ function Jornada() {
 
   return (
     <div className="jornada-container">
-      <Sidebar activeItem="jornada" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="jornada-main">
         <header className="page-header">
           <div className="page-header-left">

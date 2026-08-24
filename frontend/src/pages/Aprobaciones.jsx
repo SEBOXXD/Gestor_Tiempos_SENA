@@ -62,7 +62,7 @@ function Aprobaciones() {
 
   return (
     <div className="aprobaciones-container">
-      <Sidebar activeItem="aprobaciones" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="aprobaciones-main">
         <header className="page-header">
           <div className="page-header-left">

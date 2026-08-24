@@ -44,7 +44,7 @@ function Configuracion() {
 
   return (
     <div className="configuracion-container">
-      <Sidebar activeItem="configuracion" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="configuracion-main">
         <header className="page-header">
           <div className="page-header-left">

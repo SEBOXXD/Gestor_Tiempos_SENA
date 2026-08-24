@@ -49,7 +49,7 @@ function Notificaciones() {
 
   return (
     <div className="notificaciones-container">
-      <Sidebar activeItem="notificaciones" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="notificaciones-main">
         <header className="page-header">
           <div className="page-header-left">

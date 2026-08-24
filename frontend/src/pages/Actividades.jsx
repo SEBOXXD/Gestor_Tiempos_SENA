@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "../context/AuthContext"
+
 import { apiGet } from "../services/api"
 import "../styles/Actividades.css"
 import Sidebar from "../components/Sidebar"
 
 function Actividades() {
-  const { user } = useAuth()
   const [actividades, setActividades] = useState([])
   const [filter, setFilter] = useState("todas")
   const [loading, setLoading] = useState(true)
@@ -43,7 +42,7 @@ function Actividades() {
 
   return (
     <div className="actividades-container">
-      <Sidebar activeItem="actividades" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="actividades-main">
         <header className="page-header">
           <div className="page-header-left">

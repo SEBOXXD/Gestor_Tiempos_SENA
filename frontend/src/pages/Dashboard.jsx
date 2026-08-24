@@ -46,7 +46,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <Sidebar activeItem="/dashboard" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="main-content">
         <header className="header">
           <h1>Dashboard</h1>

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "../context/AuthContext"
+
 import { apiGet } from "../services/api"
 import "../styles/Reportes.css"
 import Sidebar from "../components/Sidebar"
 
 function Reportes() {
-  const { user } = useAuth()
   const [resumen, setResumen] = useState(null)
   const [horasPorUsuario, setHorasPorUsuario] = useState([])
   const [turnosData, setTurnosData] = useState([])
@@ -40,7 +39,7 @@ function Reportes() {
 
   return (
     <div className="reportes-container">
-      <Sidebar activeItem="/dashboard" userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="reportes-main">
         <header className="page-header">
           <div className="page-header-left">

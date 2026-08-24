@@ -61,7 +61,7 @@ function Inicio() {
 
   return (
     <div className="inicio-container">
-      <Sidebar userName={user?.nombre} userRole={user?.rol} userInitial={user?.nombre?.[0] || "U"} />
+      <Sidebar />
       <main className="inicio-main">
         <div className="welcome-banner">
           <div className="welcome-text">
