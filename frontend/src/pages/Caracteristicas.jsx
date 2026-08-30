@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Background from "../components/Background"
+import "../styles/Landing.css"
 import "../styles/Caracteristicas.css"
 
 const modulos = [
